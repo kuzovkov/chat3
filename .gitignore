@@ -3,3 +3,4 @@ certbot/conf/
 certbot/conf/live/*
 .idea
 backend/node_modules
+frontend/node_modules

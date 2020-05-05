@@ -26,8 +26,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     volumes:
-      volumes:
-      - ./app:/usr/src/env/app
+      - ./frontend:/usr/src/env
     dns: 8.8.8.8
     ports:
       - "8080:8080"
@@ -44,7 +43,7 @@ services:
   nginx:
     image: nginx:1.15-alpine
     depends_on:
-     - chat
+     - backend
     ports:
       - "80:80"
       - "443:443"
