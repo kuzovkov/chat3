@@ -1,4 +1,4 @@
-# ad-project
+# Frontend
 
 ## Project setup
 ```
@@ -27,27 +27,34 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 Install
 ================
+
+```bash
 sudo docker-compose exec frontend bash
-$ vue create app
-// navigate to new project directory
-$ cd app
+vue create app
+cd app
+```
+
 Теперь, когда у вас есть созданный проект, вы можете добавить Vuetify Vue CLI пакет с помощью cli.
 
-$ vue add vuetify
-
+```bash
+vue add vuetify
 npm install vue-router
-npm run serve
+```
 
-http://localhost:8080
-
-// vue.config.js
+// `vue.config.js`
+```javascript
 module.exports = {
     // options...
     devServer: {
         disableHostCheck: true
     }
 }
+```
+```bash
+npm run serve
+```
 
+https://chat2.kuzovkov12.ru
 
 Firebase
 --------------
