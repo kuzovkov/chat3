@@ -1,0 +1,5 @@
+/backend/users_files/*
+certbot/conf/
+certbot/conf/live/*
+.idea
+backend/node_modules
