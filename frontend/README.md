@@ -38,7 +38,10 @@ cd app
 
 ```bash
 vue add vuetify
-npm install vue-router
+npm install --save vue-router
+npm install --save vuex
+npm install --save socket.io 
+npm install --save vue-socket.io
 ```
 
 // `vue.config.js`
