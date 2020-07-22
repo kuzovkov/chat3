@@ -74,6 +74,17 @@ function get_ice(socket, chat) {
     });
 }
 
+function login(socket, chat){
+    socket.on('login', function (data) {
+        var username = data.username;
+        if (chat.addUser(username)){
+            socket.emit('login_success', {username: username});
+        }else{
+            socket.emit('login_fail', {message: 'This username is busy!'})
+        }
+    });
+}
+
 
 
 exports.user_connect = user_connect;
@@ -83,3 +94,4 @@ exports.message_history = message_history;
 exports.request_files = request_files;
 exports.wrtc_message = wrtc_message;
 exports.get_ice = get_ice;
+exports.login = login;

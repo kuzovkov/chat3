@@ -1,5 +1,4 @@
-class User {
-
+export class User {
     constructor (username){
          this.username = username;
      }
@@ -12,21 +11,25 @@ export default {
     },
     mutations: {
         setUser(state, username){
-            state.user = new User(username);
-            localStorage.setItem('username', username)
-        },
-        deleteUser(state){
-            state.user = null;
+            if (username){
+                state.user = new User(username);
+                localStorage.setItem('username', username)
+            }else{
+                state.user = null;
+                localStorage.removeItem('username');
+            }
+            this.commit('save', null);
+
         },
         setRoomId(state, roomId){
             state.roomId = roomId;
-        }
+            this.commit('save', null);
+        },
     },
     actions: {
         setUser({commit}, username){
             commit('setUser', username);
-        }
-
+        },
         /*
         registerUser({commit}, {email, password}){
             commit('clearError');
@@ -83,11 +86,15 @@ export default {
     },
     getters: {
        user(state){
+           let username = localStorage.getItem('username');
+           if (!state.user && username)
+               return new User(username);
            return state.user;
        },
         roomId(state){
            return state.roomId;
-        }
+       },
+
     }
 
 }

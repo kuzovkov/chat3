@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import Room from '@/components/Room'
-import Conference from '@/components/Conference'
+import Login from '@/components/Login'
+import Chat from '@/components/Chat'
 import AuthGuard from './auth.guard'
 
 
@@ -13,25 +12,15 @@ export default new Router({
     routes: [
         {
             path: '',
-            name: 'home',
-            component: Home
+            name: 'login',
+            component: Login
         },
         {
-            path: '/room/:room',
+            path: '/chat',
             name: 'room',
-            props: true,
-            component: Room,
+            component: Chat,
             beforeEnter: AuthGuard
         },
-        {
-            path: '/conference/:roomid',
-            name: 'conference',
-            props: true,
-            component: Conference,
-            beforeEnter: AuthGuard
-        }
-
-
     ],
     mode: 'history'
 })

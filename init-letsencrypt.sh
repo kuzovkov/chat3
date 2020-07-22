@@ -7,7 +7,7 @@ fi
 
 domains=(chat2.kuzovkov12.ru)
 rsa_key_size=4096
-data_path="./docker/certbot"
+data_path="./certbot"
 email="chat2@kuzovkov12.ru" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 

@@ -3,25 +3,29 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import store from './store';
 import router from './router';
-import VueSocketIO from 'vue-socket.io';
-import SocketIO from "socket.io-client";
+import VueSocketIO from 'vue-socket.io'
+import io from 'socket.io-client'
 import {eventHandler} from './modules/socket';
+import config from './config';
+import Debug from './components/Debug.vue';
+
+
 
 Vue.config.productionTip = false;
+const backendUrl = config.BACKEND_URL;
 
-//const socket = SocketIO('https://back.kuzovkov12.ru', {path: '/socket.io'});
-
+// Socket config
 Vue.use(new VueSocketIO({
-  debug: false,
-  connection: 'https://back.kuzovkov12.ru',
-  options: { path: '/socket.io/', transports: ['websocket'] },
+  debug: true,
+  connection: io(`${backendUrl}/`, { autoConnect: true }),
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
     mutationPrefix: 'SOCKET_'
   },
-}), SocketIO);
+}));
 
+Vue.component('debug', Debug);
 
 new Vue({
   vuetify,
@@ -29,19 +33,9 @@ new Vue({
   router,
   render: h => h(App),
   created(){
-    this.$socket.on('connect', () => {
-       console.log('socket connected!!!');
-    });
-
-    this.$socket.on('disconnect', () => {
-      console.log('socket disconnected')
-    });
-
+    this.$socket.on('connect', () => {console.log('WS connected!!!')});
     this.$socket.onevent = eventHandler;
-
-    this.$socket.on('ice', (data) => {
-      console.log('!!!', data)
-    });
+    this.$store.commit('load', null);
   },
 
 }).$mount('#app');
