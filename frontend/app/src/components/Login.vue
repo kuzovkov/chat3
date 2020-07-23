@@ -12,13 +12,13 @@
                                     <v-toolbar-title>Choose your nickname</v-toolbar-title>
                                 </v-toolbar>
                                 <v-card-text>
-                                    <v-form ref="form" v-model="valid" lazy-validation>
-                                        <v-text-field label="Username" :rules="rules" hide-details="auto" v-model="username"></v-text-field>
+                                    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+                                        <v-text-field label="Username" :rules="rules" hide-details="auto" v-model="username" @keyup.enter="login"></v-text-field>
                                     </v-form>
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer />
-                                    <v-btn :disabled="!valid" class="success" @click="login"><v-icon>mdi-cellphone-iphone</v-icon>Sign In</v-btn>
+                                    <v-btn :disabled="!valid" class="success" @click="login" @keyup.enter="login"><v-icon>mdi-cellphone-iphone</v-icon>Sign In</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-col>
@@ -93,7 +93,8 @@
         created(){
             console.log('login created');
             this.$store.commit('setUser', null);
-            this.$socket.emit('disconnect');
+            this.$socket.disconnect();
+            this.$socket.connect();
 
         }
     }

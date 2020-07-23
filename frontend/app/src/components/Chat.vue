@@ -4,7 +4,7 @@
             <v-navigation-drawer v-model="drawer" app clipped>
                 <h4 class="text-left">Users:</h4>
                 <v-list dense>
-                    <v-list-item link v-for="user in userlist" :key="user">
+                    <v-list-item link v-for="user in userlist" :key="user" :disabled="user===username" @click="selectUser(user)">
                         <v-list-item-action>
                             <v-icon>mdi-human</v-icon>
                         </v-list-item-action>
@@ -46,15 +46,7 @@
             </v-app-bar>
 
             <v-content>
-
-
-                <!-- Provides the application the proper gutter -->
-
-
-                <!-- If using vue-router -->
-
-
-
+                <trollbox :messages="chatMessages" :to="null" :broadcast="true" :room="room" :from="username"></trollbox>
             </v-content>
 
             <template v-if="error">
@@ -72,7 +64,7 @@
 
             <template v-if="message">
                 <v-snackbar
-                        :color="'yellow'"
+                        :color="'green'"
                         :multi-line="true"
                         :timeout="5000"
                         @input="closeMessage"
@@ -133,7 +125,14 @@
             },
             userlist(){
                 return this.$store.getters.userlist;
+            },
+            chatMessages(){
+               return this.$store.getters.chatMessages;
+            },
+            room(){
+                return this.$store.getters.roomId;
             }
+
         },
         methods: {
               send(){
@@ -147,6 +146,9 @@
             },
             closeError(){
                 this.$store.commit('clearError');
+            },
+            selectUser(user){
+                console.log('user:', user);
             }
         },
         created(){

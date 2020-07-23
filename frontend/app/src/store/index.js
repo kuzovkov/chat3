@@ -2,19 +2,25 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import user from './user'
 import shared from './shared'
-import {User} from './user';
+import {User} from '../modules/classes';
+import {Message} from '../modules/classes';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+    state: {
+        iceServers: null,
+        userlist: [],
+        chatMessages: []
+    },
     modules: {
         user,
         shared
     },
     mutations: {
-      setIce(state, payload){
+        setIce(state, payload){
           state.iceServers = payload;
-      },
+        },
 
         save(state, payload){
             localStorage.setItem('state', JSON.stringify(state))
@@ -33,6 +39,12 @@ export default new Vuex.Store({
         },
         setUserlist(state, userlist){
             state.userlist = userlist;
+        },
+        setChatMessages(state, messages){
+            state.chatMessages = messages;
+        },
+        addChatMessage(state, message){
+            state.chatMessages.push(message)
         }
 
     },
@@ -43,10 +55,12 @@ export default new Vuex.Store({
         setUserlist({commit}, userlist){
             commit('setUserlist', userlist);
         },
-    },
-    state: {
-        iceServers: null,
-        userlist: []
+        setChatMessages({commit}, messages){
+            commit('setChatMessages', messages);
+        },
+        addChatMessage({commit}, message){
+            commit('addChatMessage', message);
+        }
     },
     getters: {
         iceServers(state){
@@ -54,6 +68,10 @@ export default new Vuex.Store({
         },
         userlist(state){
             return state.userlist;
-        }
+        },
+        chatMessages(state){
+            return state.chatMessages;
+        },
+
     }
 })

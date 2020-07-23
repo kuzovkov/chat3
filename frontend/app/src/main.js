@@ -8,6 +8,7 @@ import io from 'socket.io-client'
 import {eventHandler} from './modules/socket';
 import config from './config';
 import Debug from './components/Debug.vue';
+import Trollbox from './components/Trollbox.vue';
 
 
 
@@ -26,6 +27,7 @@ Vue.use(new VueSocketIO({
 }));
 
 Vue.component('debug', Debug);
+Vue.component('trollbox', Trollbox);
 
 new Vue({
   vuetify,
@@ -34,6 +36,7 @@ new Vue({
   render: h => h(App),
   created(){
     this.$socket.on('connect', () => {console.log('WS connected!!!')});
+    this.$socket.on('disconnect', () => {console.log('WS disconnected!!!')});
     this.$socket.onevent = eventHandler;
     this.$store.commit('load', null);
   },

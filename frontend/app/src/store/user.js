@@ -1,8 +1,4 @@
-export class User {
-    constructor (username){
-         this.username = username;
-     }
-}
+import {User} from '../modules/classes';
 
 export default {
     state: {

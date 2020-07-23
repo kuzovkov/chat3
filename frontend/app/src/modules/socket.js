@@ -1,5 +1,6 @@
 import store from '../store';
 import router from '../router';
+import {Message} from '../modules/classes';
 
 export function eventHandler(packet) {
     if (packet.data) {
@@ -11,6 +12,9 @@ export function eventHandler(packet) {
             case 'login_fail': onLoginFail(obj.payload); break;
             case 'new_user': onNewUser(obj.payload); break;
             case 'users_online': onUsersOnline(obj.payload); break;
+            case 'user_disconnected': onUserDisconnected(obj.payload); break;
+            case 'last_messages': onLastMessages(obj.payload); break;
+            case 'new_message': onNewMessage(obj.payload); break;
             default: console.log('unhandled event: ', obj.name);
         }
     }
@@ -48,4 +52,31 @@ function onUsersOnline(data) {
     let userlist = data.users_online;
     store.dispatch('setUserlist', userlist);
 }
+
+function onUserDisconnected(data) {
+    let username = data.user;
+    store.dispatch('setMessage', `User ${username} leave the chat`);
+}
+
+function onLastMessages(data) {
+    let messages = [];
+    for (let i = 0; i < data.messages.length; i++){
+        let username = data.messages[i].from;
+        let message = data.messages[i].message;
+        let datetime = new Date(data.messages[i].created);
+        messages.push(new Message(username, message, datetime));
+    }
+    console.log(messages);
+    store.dispatch('setChatMessages', messages);
+}
+
+function onNewMessage(data) {
+    let username = data.message.from;
+    let msg = data.message.message;
+    let datetime = new Date(data.message.created);
+    let message = new Message(username, msg, datetime);
+    store.dispatch('addChatMessage', message);
+}
+
+
 

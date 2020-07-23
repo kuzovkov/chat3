@@ -106,10 +106,11 @@ Chat.getSocket = function(nicname){
  * @param from
  * @param to
  * @param message
+ * @param room
  */
-Chat.addMessage = function(from, to, message){
+Chat.addMessage = function(from, to, message, room=null){
     var timestamp = (new Date()).getTime();
-    message = {created: timestamp, from:from,to:to,message:message};
+    message = {created: timestamp, from:from,to:to,message:message, room:room};
     Chat.messages.push(message);
     if (Chat.messages.length > Chat.MAX_COUNT_MESS){
         Chat.messages.splice(0, Chat.messages.length - Chat.MAX_COUNT_MESS)
@@ -122,17 +123,39 @@ Chat.addMessage = function(from, to, message){
  * @param user1
  * @param user2
  * @param lefttime ширина временного интервала сообщений в часах
+ * @param room
  * @returns {Array}
  */
-Chat.getLastMessages = function(user1, user2, lefttime){
+Chat.getLastMessages = function(user1, user2, lefttime, room=null){
     var messages = [];
     var now = (new Date).getTime();
     for (var i = 0; i < Chat.messages.length; i++){
         if (Chat.messages[i]['created'] < (now - lefttime * Chat.MSEC_IN_HOUR)) continue;
+        if (room && Chat.messages[i]['room'] != room) continue;
         if (
             (Chat.messages[i]['from'] == user1 && Chat.messages[i]['to'] == user2) ||
             (Chat.messages[i]['from'] == user2 && Chat.messages[i]['to'] == user1)
         ){
+            messages.push(Chat.messages[i]);
+        }
+    }
+    return messages;
+}
+
+/**
+ * получение массива сообщений общих для комнаты
+ * @param user1
+ * @param user2
+ * @param lefttime ширина временного интервала сообщений в часах
+ * @param room
+ * @returns {Array}
+ */
+Chat.getLastMessagesBroadcast = function(user1, user2, lefttime, room){
+    var messages = [];
+    var now = (new Date).getTime();
+    for (var i = 0; i < Chat.messages.length; i++){
+        if (Chat.messages[i]['created'] < (now - lefttime * Chat.MSEC_IN_HOUR)) continue;
+        if (Chat.messages[i]['room'] == room){
             messages.push(Chat.messages[i]);
         }
     }
@@ -256,3 +279,4 @@ exports.getFilesMetadataByNicname = Chat.getFilesMetadataByNicname;
 exports.getFileMetadataBySecret = Chat.getFileMetadataBySecret;
 exports.USERS_FILES_DIR = Chat.USERS_FILES_DIR;
 exports.delFileMetadataBySecret = Chat.delFileMetadataBySecret;
+exports.getLastMessagesBroadcast = Chat.getLastMessagesBroadcast;

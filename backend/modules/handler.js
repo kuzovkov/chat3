@@ -36,20 +36,29 @@ function user_message(socket, chat){
     socket.on('user_message', function(data){
         console.log(data);
         var nicname = chat.getNicname(socket.id);
-        var adresat_id = chat.getSocketId(data.to);
-        var messageObject = chat.addMessage(nicname, data.to, data.message);
-        socket.broadcast.to(adresat_id).emit('new_message', {message:messageObject});
-        socket.emit('new_message', {message:messageObject});
+        var messageObject = chat.addMessage(nicname, data.to, data.message, data.room);
+        if (!data.to){//broadcast message
+            socket.broadcast.emit('new_message', {message:messageObject});
+            socket.emit('new_message', {message:messageObject});
+        }else{
+            var adresat_id = chat.getSocketId(data.to);
+            socket.broadcast.to(adresat_id).emit('new_message', {message:messageObject});
+            socket.emit('new_message', {message:messageObject});
+        }
     });
 }
 
 function message_history(socket, chat){
     socket.on('message_history', function(data){
-        var messages = chat.getLastMessages(data.user1, data.user2, data.lefttime);
-        socket.emit('last_messages', {messages:messages});
+        if (!data.user2){
+            var messages = chat.getLastMessagesBroadcast(data.user1, data.user2, data.lefttime, data.room);
+            socket.emit('last_messages', {messages:messages});
+        }else{
+            var messages = chat.getLastMessages(data.user1, data.user2, data.lefttime, data.room);
+            socket.emit('last_messages', {messages:messages});
+        }
     });
 }
-
 
 function request_files(socket, chat){
     socket.on('request_files', function(data){

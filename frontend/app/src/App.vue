@@ -1,6 +1,9 @@
 <template>
   <div>
-    <router-view></router-view>
+    <router-view> <!-- Provides the application the proper gutter -->
+
+
+      <!-- If using vue-router --></router-view>
   </div>
 
 </template>
