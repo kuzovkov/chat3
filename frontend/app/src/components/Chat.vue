@@ -46,7 +46,7 @@
             </v-app-bar>
 
             <v-content>
-                <trollbox :messages="chatMessages" :to="null" :broadcast="true" :room="room" :from="username"></trollbox>
+                <trollbox :messages="chatMessages" :to="null" :broadcast="true" :room="room" :from="username" :title="'Broadcast chat:'"></trollbox>
             </v-content>
 
             <template v-if="error">
