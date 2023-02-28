@@ -45,6 +45,14 @@ class UsersRepository
         return $users;
     }
 
+    public function getIdByNicname($nicname) {
+        foreach ($this->table as $id => $row){
+            if($row['nicname'] === $nicname)
+                return $id;
+        }
+        return null;
+    }
+
     public function getUsers(){
         $users = [];
         foreach ($this->table as $row){

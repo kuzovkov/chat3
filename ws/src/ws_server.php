@@ -125,21 +125,19 @@ class WebsocketServer
                 }
                 break;
 
-            case 'get_event':
-                if ($decodedData->event_id){
-                    $currEvent = $this->eventRepository->get($decodedData->event_id);
-                    if (!$currEvent){
-                        $currEvent = ['event_id' => $decodedData->event_id, 'publisher_id' => '', 'is_live' => 0];
-                    }
-                    $this->ws->push($frame->fd, json_encode(['type' => 'curr_event', 'event' => $currEvent, 'event_id' => $decodedData->event_id]));
-                }
+            case 'get_ice':
+                $ice = \getIce();
+                $this->ws->push($frame->fd, json_encode(['type' => 'ice', 'ice' => $ice]));
                 break;
 
-            case 'stream_updated':
-                if ($decodedData->event_id){
-                foreach ($this->ws->connections as $id){
-                        print('sending update_stream:'.PHP_EOL);
-                        $this->ws->push($id, json_encode(['type' => 'update_stream', 'event_id' => $decodedData->event_id]));
+            case 'wrtc_message':
+                $user = $this->usersRepository->get($frame->fd);
+                if ($user){
+                    $nicname = $user['data']['nicname'];
+                    $message = $decodedData->message;
+                    $adresatId = $this->usersRepository->getIdByNicname($decodedData->to);
+                    if ($adresatId){
+                        $this->ws->push($adresatId, json_encode(['type' => 'wrtc_message', 'message' => $message, 'from' => $nicname]));
                     }
                 }
                 break;
