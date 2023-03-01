@@ -240,6 +240,7 @@ WRTC.hangup = function(){
     document.getElementById("screenshareButton").style.display = 'none';
     document.getElementById("videoOff").style.display = 'none';
     document.getElementById("videoOn").style.display = 'none';
+    WRTC.app.iface.resetStylesAfterCall();
 };
 
 /**

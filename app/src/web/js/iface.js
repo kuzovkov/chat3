@@ -417,7 +417,7 @@ I.hideNote = function(){
 * преобразование timestamp в строку даты-времени
 */
 I.timestamp2date = function(timestamp){
-    var date = new Date(timestamp);
+    var date = new Date(timestamp * 1000);
     return date.toLocaleString();
 };
 
@@ -459,6 +459,34 @@ I.chat_enable = function(status){
 };
 
 /**
+ * установка стилей элементов после завершения видеовызова
+ */
+I.resetStylesAfterCall = function(){
+  console.log('I.resetStylesAfterCall');
+  var divLocal = document.querySelector('div.localVideo');
+  var divRemote = document.querySelector('div.remoteVideo');
+  var vidLocal = document.querySelector('video[id="localVideo"]');
+  var vidRemote = document.querySelector('video[id="remoteVideo"]');
+  divLocal.style.width = '40%';
+  divLocal.style.height = 'auto';
+  divLocal.style.position = 'absolute';
+  divLocal.style.right = '1.1em';
+  divLocal.style.bottom = '1em';
+  divRemote.style.width = '100%';
+  divRemote.style.height = 'auto';
+  divRemote.style.position = 'absolute';
+  divRemote.style.top = '10px';
+  divRemote.style.right = '1.1em';
+  divRemote.style.bottom = '1em';
+  vidLocal.style.width = '100%';
+  vidLocal.style.height = 'calc(100% - 1.0em - 3px)';
+  vidLocal.style.margin = '0';
+  vidRemote.style.width = '100%';
+  vidRemote.style.height = 'calc(100% - 1.0em - 3px)';
+  vidRemote.style.margin = '0';
+}
+
+/**
  * generation UUID4 code
  * @returns {string}
  * @constructor
@@ -469,6 +497,7 @@ UUID4 = function () {
         return v.toString(16);
     });
 };
+
 
 
 

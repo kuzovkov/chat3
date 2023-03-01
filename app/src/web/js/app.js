@@ -162,8 +162,12 @@ A.sendFile = function(f, progressbar){
         console.log('send file p2p');
         Fp2p.sendFile(f, A.wrtc.file_datachannel, progressbar);
     }else{
-        console.log('send file to server');
-        F.sendFile(f, '/upload', A.selected_user, A.nicname, progressbar);
+        /*отключение поддержки отправки файлов через сервер (не p2p)*/
+        var note = 'Sending files is possible only to user which you have active call';
+        A.iface.showNote(note);
+        A.iface.clearSelectedFiles();
+        // console.log('send file to server');
+        // F.sendFile(f, '/upload', A.selected_user, A.nicname, progressbar);
     }
 
 };

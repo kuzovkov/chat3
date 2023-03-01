@@ -6,7 +6,7 @@ use Swoole\WebSocket\Frame;
 use Swoole\WebSocket\Server;
 use App\Repository\UsersRepository;
 use App\Repository\StoreRepository;
-use App\Repository\EventRepository;
+use App\Repository\MessageRepository;
 
 /**
  * Class WebsocketServer
@@ -22,7 +22,7 @@ class WebsocketServer
 
     private $usersRepository;
     private $storeRepository;
-    private $eventRepository;
+    private $messageRepository;
 
     /**
      * WebsocketServer constructor.
@@ -31,7 +31,7 @@ class WebsocketServer
 
         $this->usersRepository = new UsersRepository();
         $this->storeRepository = new StoreRepository();
-        $this->eventRepository = new EventRepository();
+        $this->messageRepository = new MessageRepository();
 
         $this->ws = new Server('0.0.0.0', 9502);
 
@@ -138,6 +138,32 @@ class WebsocketServer
                     $adresatId = $this->usersRepository->getIdByNicname($decodedData->to);
                     if ($adresatId){
                         $this->ws->push($adresatId, json_encode(['type' => 'wrtc_message', 'message' => $message, 'from' => $nicname]));
+                    }
+                }
+                break;
+
+            case 'user_message':
+                $user = $this->usersRepository->get($frame->fd);
+                if ($user && isset($decodedData->message)){
+                    $nicname = $user['data']['nicname'];
+                    $adresatId = $this->usersRepository->getIdByNicname($decodedData->to);
+                    if ($adresatId){
+                        $messageObject = $this->messageRepository->save(['from' => $nicname, 'to' => $decodedData->to, 'message' => $decodedData->message]);
+                        if ($messageObject){
+                            $this->ws->push($adresatId, json_encode(['type' => 'new_message', 'message' => $messageObject]));
+                            $this->ws->push($frame->fd, json_encode(['type' => 'new_message', 'message' => $messageObject]));
+                        }
+                    }
+                }
+                break;
+
+            case 'message_history':
+                $user = $this->usersRepository->get($frame->fd);
+                if ($user){
+                    $nicname = $user['data']['nicname'];
+                    if ($decodedData->user1 && $decodedData->user2 && $decodedData->lefttime){
+                        $messages = $this->messageRepository->getLastMessages($decodedData->user1, $decodedData->user2, $decodedData->lefttime);
+                        $this->ws->push($frame->fd, json_encode(['type' => 'last_messages', 'messages' => $messages]));
                     }
                 }
                 break;

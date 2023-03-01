@@ -5,15 +5,17 @@ $pages = 'pages/';
 $scripts = 'scripts/';
 $root_dir = ''; /*если скрипт не в корневом каталоге сервера*/
 
-$routes = array(
+$routes = [
     '/' => $pages . 'index.php',
     '/login' => $pages . 'login.php',
     '/logout' => $scripts . 'logout.php',
     '/info' => $pages . 'info.php',
     '404' => $pages . '404.php',
+    '/file' => $scripts . 'download_file.php',
+    '/file-del' => $scripts . 'delete_file.php',
+    '/upload' => $scripts . 'upload.php',
 
-
-);
+];
 
 
 
