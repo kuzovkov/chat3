@@ -12,12 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nicname']) && strlen(
 ?>
 
 
-<?php require_once('_header.php') ?>
+<?php require_once('_header_login.php') ?>
 
     <div class="input-nicname ui-widget-content">
 
-        <form method="post" action="/login">
-            <div class="error"><?php if (isset($message) && $message):?> <?=$message?> <?php endif;?></div>
+        <form method="post" action="/login" id="login-form">
+            <div class="error"></div>
             <label>Choose You NicName: </label>
             <div>
                 <input type="text" name="nicname"/>

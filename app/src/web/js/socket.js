@@ -17,7 +17,8 @@ Socket.init = function(app){
     Socket.app = app;
     Socket.url = window.location.host;
     Socket.pathname = window.location.pathname;
-    Socket.socket = new WebSocket("wss://" + window.location.host + `/ws/?nicname=${NICNAME}`);
+    var socketurl = (NICNAME)? "wss://" + window.location.host + `/ws/?nicname=${NICNAME}` : "wss://" + window.location.host + `/ws/`
+    Socket.socket = new WebSocket(socketurl);
     Socket.socket.keepalive = true;
     Socket.hostname = window.location.hostname;
     Socket.socket.onopen = function () {

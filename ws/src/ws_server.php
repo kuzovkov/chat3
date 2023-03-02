@@ -91,6 +91,9 @@ class WebsocketServer
                     $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse]));
                 }
             }
+        } else {
+            $usersResponse = $this->usersRepository->getUsers();
+            $this->ws->push($request->fd, json_encode(['type' => 'users_online', 'users_online' => $usersResponse]));
         }
     }
 
