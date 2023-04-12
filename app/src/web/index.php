@@ -34,7 +34,6 @@ if (isset($_SERVER['REQUEST_URI'])){
     if (strlen($root_dir) && strpos($uri, $root_dir) === 0){
         $uri = substr($uri, strlen($root_dir));
     }
-
     if (!Auth::isAuth() && $uri != '/login' && $uri != '/auth') { header('Location: /login'); exit(); }
 
     if (isset($routes[$uri])){
